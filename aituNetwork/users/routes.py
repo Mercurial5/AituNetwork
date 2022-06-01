@@ -2,7 +2,8 @@ from flask import request, render_template, session
 from flask import redirect, url_for, flash
 from passlib.hash import sha256_crypt
 from aituNetwork.users import users
-from aituNetwork.models import Users, ProfilePictures, Friends, Posts, UsersChats, Chats, Cities, EduPrograms, Admins, Messages, PostLikes
+from aituNetwork.models import Users, ProfilePictures, Friends, Posts, UsersChats, Chats, Cities, EduPrograms, Admins, \
+    Messages, PostLikes
 from aituNetwork import db
 from utils import picturesDB, auth_required
 
@@ -47,20 +48,31 @@ def messages():
     return render_template('messages.html', user=user, chats=chats)
 
 
-@users.route('/settings', methods=['GET', 'POST'])
+@users.route('/settings', defaults={'user_id': None}, methods=['GET', 'POST'])
+@users.route('/settings/<user_id>', methods=['GET', 'POST'])
 @auth_required
-def settings():
+def settings(user_id: int):
     user = session['user']
+
+    if user_id is None:
+        user_id = user.id
+
+    target_user = Users.get(user_id)
+
+    if user.id != user_id and not Admins.is_admin(user.id):
+        flash('You don\'t access', 'danger')
+        return redirect(url_for('users.profile', slug=Users.get(user_id).slug))
+
     edu_programs = EduPrograms.get_edu_programs()
     cities = Cities.get_cities()
 
     if request.method == 'GET':
-        return render_template('settings.html', user=user, cities=cities, edu_programs=edu_programs)
+        return render_template('settings.html', user=target_user, cities=cities, edu_programs=edu_programs)
 
     picture = request.files.get('profile-picture')
     if picture:
         picture_name = picturesDB.add_picture('profile-pictures', picture)
-        profile_picture = ProfilePictures(user_id=user.id, name=picture_name)
+        profile_picture = ProfilePictures(user_id=target_user.id, name=picture_name)
         db.session.add(profile_picture)
 
     slug = request.form.get('slug')
@@ -75,25 +87,24 @@ def settings():
     password = request.form.get('password')
     password_confirm = request.form.get('password-confirm')
 
-    print(city)
-
     if password != '':
         if password != password_confirm:
             flash('Passwords does not match')
             return redirect(url_for('users.settings'))
         password = sha256_crypt.hash(password)
     else:
-        password = user.password
+        password = target_user.password
 
-    if Users.is_slug_taken(slug) and slug != user.slug:
+    if Users.is_slug_taken(slug) and slug != target_user.slug:
         flash('Slug is already taken.', 'danger')
         return redirect(url_for('users.settings'))
 
     update_info = dict(slug=slug, first_name=first_name, last_name=last_name, about_me=about_me, birthday=birthday,
                        city=city, course=course, edu_program=edu_program, password=password)
-    Users.update_user_info(user.id, update_info)
+    Users.update_user_info(target_user.id, update_info)
 
-    session['user'] = Users.query.get(user.id)
+    if user.id == target_user.id:
+        session['user'] = Users.query.get(target_user.id)
 
     flash('Info was updated', 'success')
     return redirect(url_for('users.settings'))
@@ -205,11 +216,11 @@ def delete_user(user_id: int):
 def delete_post(post_id):
     user = session['user']
     post = Posts.get(post_id)
+    profile_user = Users.get(post.author_id)
 
     if user.id != post.author_id and not Admins.is_admin(user.id):
         flash('You don\'t access', 'danger')
-
-    profile_user = Users.get(post.author_id)
+        return redirect(url_for('users.profile', slug=profile_user.slug))
 
     Posts.delete_post(post_id)
 

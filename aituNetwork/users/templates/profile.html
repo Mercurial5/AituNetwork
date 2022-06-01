@@ -68,7 +68,7 @@
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
                                         <li><a class="dropdown-item" role="button" onclick="confirm_delete()">Delete user</a></li>
-                                        <li><a class="dropdown-item" href="#">Change info</a></li>
+                                        <li><a class="dropdown-item" href="{{ url_for('users.settings', user_id=profile_user.id) }}">Change info</a></li>
                                     </ul>
                                 </div>
                                 {% endif %}
