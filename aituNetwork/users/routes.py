@@ -136,16 +136,22 @@ def add_post():
 @users.route('/movies', methods=['GET', 'POST'])
 @auth_required
 def movies_search():
-    api_url = "https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword"
+    url_search = "https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword"
+    url_top = "https://kinopoiskapiunofficial.tech/api/v2.1/films/top"
     headers = {'X-API-KEY': '1af58e0d-6f44-4ec0-9a57-5a51c892f857', 'Content-Type': 'application/json'}
     search_text = request.values.get("search-text")
-    params = {"keyword": search_text}
-    r = requests.get(api_url, params=params, headers=headers).json()
-    films_list = []
-    for field in r['films']:
-        films_list.append(field)
-    print(films_list)
-    return render_template('movies.html', user=session['user'], films=films_list)
+    if not search_text:
+        params = {"type": "TOP_100_POPULAR_FILMS"}
+        r = requests.get(url_top, params=params, headers=headers).json()
+        return render_template('movies.html', user=session['user'], films=r['films'])
+    else:
+        params = {"keyword": search_text}
+        r = requests.get(url_search, params=params, headers=headers).json()
+        films_list = []
+        for field in r['films']:
+            films_list.append(field)
+        return render_template('movies.html', user=session['user'], films=films_list)
+
 
 
 @users.route('/movies/<filmId>', methods=['GET', 'POST'])
