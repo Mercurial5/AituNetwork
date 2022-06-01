@@ -19,3 +19,8 @@ class Comments(db.Model):
         db.session.commit()
 
         return comment
+
+    @staticmethod
+    def delete_comment(comment_id: int):
+        Comments.query.filter_by(id=comment_id).delete()
+        db.session.commit()
