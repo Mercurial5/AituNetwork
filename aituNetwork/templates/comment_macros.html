@@ -1,4 +1,4 @@
-{% macro comment_macros(comment) %}
+{% macro comment_macros(user, comment) %}
 {% set author = get_user(comment.user_id) %}
 <div class="comment">
     <div class="d-flex">
@@ -22,7 +22,7 @@
             <div class="d-flex justify-content-between">
                 <p class="comment-text text-secondary mb-0" style="max-width: 95%">{{ comment.text }}</p>
 
-                {% if True %}
+                {% if user.id == author.id %}
                 <div class="dropdown">
                     <svg id="dropdownMenuButton1" data-bs-toggle="dropdown" xmlns="http://www.w3.org/2000/svg"
                          viewBox="0 0 128 512" width="16"
