@@ -46,3 +46,18 @@ class Users(db.Model):
         user = Users.get(user_id)
         db.session.delete(user)
 
+    @staticmethod
+    def is_user_correct(user):
+        check_user = Users.query.get(user)
+
+        if check_user is None:
+            return False
+
+        if check_user.slug != user.slug:
+            return False
+
+        for attr in ['slug', 'password']:
+            if getattr(check_user, attr) != getattr(user, attr):
+                return False
+
+        return True

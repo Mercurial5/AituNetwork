@@ -1,3 +1,4 @@
+from aituNetwork.models import Users
 from utils.PicturesDB import PicturesDB
 from flask import session, redirect, url_for
 from email.message import EmailMessage
@@ -14,7 +15,13 @@ def auth_required(func):
     def wrapper(*args, **kwargs):
         if session.get('user') is None:
             return redirect(url_for('auth.login'))
-        return func(*args, **kwargs)
+
+        user = session['user']
+        if Users.is_user_correct(user):
+            return func(*args, **kwargs)
+
+        del session['user']
+        return redirect(url_for('auth.login'))
 
     return wrapper
 
