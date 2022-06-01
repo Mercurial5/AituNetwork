@@ -5,6 +5,7 @@ from aituNetwork.users import users
 from aituNetwork.models import Users, ProfilePictures, Friends, Posts, UsersChats, Chats, Cities, EduPrograms, Admins, Messages, PostLikes
 from aituNetwork import db
 from utils import picturesDB, auth_required
+import requests, json
 
 
 @users.route('/profile/<slug>', methods=['GET'])
@@ -130,6 +131,22 @@ def add_post():
 
     flash('Your post is added!', 'success')
     return redirect(url_for('users.profile', slug=session['user'].slug))
+
+
+@users.route('/movies', methods=['GET', 'POST'])
+@auth_required
+def movies_search():
+    api_url = "https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword"
+    headers = {'X-API-KEY': '1af58e0d-6f44-4ec0-9a57-5a51c892f857', 'Content-Type': 'application/json'}
+    search_text = request.values.get("search-text")
+    params = {"keyword": search_text}
+    r = requests.get(api_url, params=params, headers=headers).json()
+    films_list = []
+    for field in r['films']:
+        films_list.append(field)
+    print(films_list)
+    return render_template('movies.html', user=session['user'], films=films_list)
+
 
 
 @users.route('/find-friends')

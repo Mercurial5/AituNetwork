@@ -1,0 +1,44 @@
+{% extends 'main.html' %}
+
+{% block title %} Movies {% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="main-body">
+        <div class="row">
+            <div class="col-lg-2">
+                {{ sidebar(user) }}
+            </div>
+            <div class="col-lg-8">
+                <div class="card-body">
+                    <form class="form-inline mx-auto">
+                        <h2>Find movie</h2>
+                        <input class="form-control form-control-sm mr-3 w-75" type="text" id="search-text-input" name="search-text" placeholder="Search for the movie..." aria-label="Search">
+                        <i class="fa fa-search" aria-hidden="true"></i>
+                    </form>
+                </div>
+                <div class="container">
+                    <div class="row">
+                    {% for film in films %}
+                        <div class="col-xs-4 col-sm-4 col-md-4 col-centered">
+                            <div class="card mb-4">
+                                <div class="d-flex align-items-center">
+                                    <a href="{{ url_for('users.movies_search', slug='film.filmId') }}" class="text-secondary text-decoration-none" role="button">
+                                            <img style="width: 70%; height: 70%" class="img-responsive" src="{{ film.posterUrlPreview }}" alt="{{ film.nameEn }}">
+                                            <span>{{ film.nameEn}}
+                                                    ({{ film.year }})
+                                            </span>
+                                    </a>
+                                </div>
+                            </div>
+                        </div>
+                    {% endfor %}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script src="//yohoho.cc/yo.js"> </script>
+{% endblock %}
