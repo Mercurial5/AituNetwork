@@ -7,6 +7,8 @@ Create Date: 2022-06-01 04:24:16.578054
 """
 from alembic import op
 import sqlalchemy as sa
+from sqlalchemy.sql import table, column
+from sqlalchemy import Integer, String
 
 
 # revision identifiers, used by Alembic.
@@ -30,6 +32,26 @@ def upgrade():
     op.create_index(op.f('ix_users_city'), 'users', ['city'], unique=False)
     op.create_index(op.f('ix_users_course'), 'users', ['course'], unique=False)
     op.create_index(op.f('ix_users_edu_program'), 'users', ['edu_program'], unique=False)
+
+    edu_programs = table('edu_programs',
+                         column('id', Integer),
+                         column('name', String))
+
+    op.bulk_insert(edu_programs, [
+        {'name': 'Computer Science'},
+        {'name': 'Software Engineering'},
+        {'name': 'Big Data Analysis'},
+        {'name': 'Media Technologies'},
+        {'name': 'Mathematical and Computational science'},
+        {'name': 'Telecommunication systems'},
+        {'name': 'Smart Technologies'},
+        {'name': 'Digital Journalism'},
+        {'name': 'IT Management'},
+        {'name': 'Cyber Security'},
+        {'name': 'IT Entrepreneurship'},
+        {'name': 'Digital public administration and services'},
+        {'name': 'Industrial Internet of Things'}
+    ])
     # ### end Alembic commands ###
 
 
