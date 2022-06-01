@@ -24,3 +24,11 @@ class Comments(db.Model):
     def delete_comment(comment_id: int):
         Comments.query.filter_by(id=comment_id).delete()
         db.session.commit()
+
+    @staticmethod
+    def delete_for_deleted_user(user_id: int):
+        comments_id_list = Comments.query.filter_by(user_id=user_id).with_entities(Comments.id).all()
+
+        Comments.query.filter_by(user_id=user_id).delete()
+
+        return comments_id_list

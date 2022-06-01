@@ -202,6 +202,10 @@ def delete_user(user_id: int):
     posts_id_list = Posts.delete_posts_for_deleted_user(user_id)
     PostLikes.delete_likes_for_deleted_user(user_id, posts_id_list)
 
+    # delete from Comments/PostComments
+    comments_id_list = Comments.delete_for_deleted_user(user_id)
+    [PostComments.delete_comment_from_post(comment_id[0]) for comment_id in comments_id_list]
+
     # delete from ProfilePictures
     pictures = ProfilePictures.delete_pictures_for_deleted_user(user_id)
     [picturesDB.delete_picture('profile-pictures', picture.name) for picture in pictures]
