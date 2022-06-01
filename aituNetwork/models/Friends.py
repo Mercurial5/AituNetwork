@@ -21,13 +21,18 @@ class Friends(db.Model):
             db.session.commit()
 
     @staticmethod
-    def get_friend_list(user_id: int):
-        return Friends.query.filter(
+    def get_friend_list(user_id: int, only_query: bool = False):
+        query = Friends.query.filter(
             Friends.user_id.in_(
                 Friends.query.filter_by(user_id=user_id).with_entities(Friends.friend_id)
             ),
             Friends.friend_id == user_id
-        ).all()
+        )
+
+        if only_query:
+            return query
+
+        return query.all()
 
     @staticmethod
     def get_friend_status(user_id: int, friend_id: int) -> int:
@@ -48,3 +53,11 @@ class Friends(db.Model):
             friend_status = 2
 
         return friend_status
+
+    @staticmethod
+    def is_friend(user_id: int, friend_id: int):
+        return Friends.query.filter_by(user_id=user_id, friend_id=friend_id).first() is not None
+
+    @staticmethod
+    def delete_friends_for_deleted_user(user_id: int):
+        Friends.query.filter((Friends.user_id == user_id) | (Friends.friend_id == user_id)).delete()

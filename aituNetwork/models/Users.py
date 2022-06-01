@@ -1,6 +1,6 @@
 from aituNetwork.models import db
 from datetime import datetime
-from utils import random_id
+from utils import random_id, picturesDB
 
 
 class Users(db.Model):
@@ -10,6 +10,10 @@ class Users(db.Model):
     first_name = db.Column(db.String(255), nullable=False)
     last_name = db.Column(db.String(255), nullable=False)
     about_me = db.Column(db.String(255), nullable=False, default='Hi there! I\'m using AITU Network!')
+    birthday = db.Column(db.DATE, nullable=True, index=True)
+    city = db.Column(db.Integer, nullable=True, index=True)
+    course = db.Column(db.Integer, nullable=True, index=True)
+    edu_program = db.Column(db.Integer, nullable=True, index=True)
     password = db.Column(db.String(255), nullable=False)
     registered = db.Column(db.DATETIME, nullable=False, default=datetime.now)
     is_activated = db.Column(db.Boolean, nullable=False, default=False)
@@ -33,5 +37,12 @@ class Users(db.Model):
         Users.query.filter_by(barcode=barcode).update(update_info)
         db.session.commit()
 
+    @staticmethod
+    def get_users_for_new_friends_list(user_id: int):
+        return Users.query.filter(Users.is_activated == 1, Users.id != user_id)
 
+    @staticmethod
+    def delete_user(user_id: int):
+        user = Users.get(user_id)
+        db.session.delete(user)
 
