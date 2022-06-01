@@ -23,7 +23,7 @@
                         <div class="col-xs-4 col-sm-4 col-md-4 col-centered">
                             <div class="card mb-4">
                                 <div class="d-flex align-items-center">
-                                    <a href="{{ url_for('users.movies_search', slug='film.filmId') }}" class="text-secondary text-decoration-none" role="button">
+                                    <a href="{{ url_for('users.movies', filmId=film.filmId) }}" class="text-secondary text-decoration-none" role="button">
                                             <img style="width: 70%; height: 70%" class="img-responsive" src="{{ film.posterUrlPreview }}" alt="{{ film.nameEn }}">
                                             <span>{{ film.nameEn}}
                                                     ({{ film.year }})

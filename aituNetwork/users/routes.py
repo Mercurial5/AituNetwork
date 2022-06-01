@@ -148,6 +148,11 @@ def movies_search():
     return render_template('movies.html', user=session['user'], films=films_list)
 
 
+@users.route('/movies/<filmId>', methods=['GET', 'POST'])
+@auth_required
+def movies(filmId):
+    return render_template('movie_player.html', user=session['user'], filmId=filmId)
+
 
 @users.route('/find-friends')
 @auth_required
