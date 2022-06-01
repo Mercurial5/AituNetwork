@@ -1,20 +1,43 @@
-{% macro comment_macros(author) %}
-<div class="comment d-flex">
-    <div class="lhs">
-        {% set picture = get_picture(author.id) %}
+{% macro comment_macros(comment) %}
+{% set author = get_user(comment.user_id) %}
+<div class="comment">
+    <div class="d-flex">
+        <div class="lhs">
+            {% set picture = get_picture(author.id) %}
 
-        {% if picture %}
-        <img src="{{ url_for('utils.get_picture', filename=picture.name) }}" width="34"
-             height="34" class="rounded-circle mt-1">
-        {% else %}
-        <img src="https://i.pinimg.com/originals/fc/04/73/fc047347b17f7df7ff288d78c8c281cf.png"
-             class="rounded-circle" width="34" height="34">
-        {% endif %}
+            {% if picture %}
+            <img src="{{ url_for('utils.get_picture', filename=picture.name) }}" width="34"
+                 height="34" class="rounded-circle mt-1">
+            {% else %}
+            <img src="https://i.pinimg.com/originals/fc/04/73/fc047347b17f7df7ff288d78c8c281cf.png"
+                 class="rounded-circle" width="34" height="34">
+            {% endif %}
+        </div>
+        <div class="rhs w-100 ms-2">
+            <div class="header d-flex justify-content-between">
+                <a href="{{ url_for('users.profile', slug=author.slug) }}"
+                   class="text-dark text-decoration-none p-0 m-0">{{
+                    author.first_name }} {{ author.last_name }}</a>
+            </div>
+            <div class="d-flex justify-content-between">
+                <p class="comment-text text-secondary mb-0" style="max-width: 95%">{{ comment.text }}</p>
+
+                {% if True %}
+                <div class="dropdown">
+                    <svg id="dropdownMenuButton1" data-bs-toggle="dropdown" xmlns="http://www.w3.org/2000/svg"
+                         viewBox="0 0 128 512" width="16"
+                         height="18">
+                        <path d="M64 360C94.93 360 120 385.1 120 416C120 446.9 94.93 472 64 472C33.07 472 8 446.9 8 416C8 385.1 33.07 360 64 360zM64 200C94.93 200 120 225.1 120 256C120 286.9 94.93 312 64 312C33.07 312 8 286.9 8 256C8 225.1 33.07 200 64 200zM64 152C33.07 152 8 126.9 8 96C8 65.07 33.07 40 64 40C94.93 40 120 65.07 120 96C120 126.9 94.93 152 64 152z"/>
+                    </svg>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton1">
+                        <li><a class="dropdown-item">Delete</a>
+                        </li>
+                    </ul>
+                </div>
+                {% endif %}
+            </div>
+        </div>
     </div>
-    <div class="rhs ms-2">
-        <a href="{{ url_for('users.profile', slug=author.slug) }}" class="text-dark text-decoration-none p-0 m-0">{{ author.first_name }} {{ author.last_name }}</a>
-        <p class="comment-text text-secondary">
-            如果我写一下汉字变成了什么？如果我写一下汉字变成了什么？如果我写一下汉字变成了什么？如果我写一下汉字变成了什么？如果我写一下汉字变成了什么？如果我写一下汉字变成了什么？如果我写一下汉字变成了什么？如果我写一下汉字变成了什么？如果我写一下汉字变成了什么？如果我写一下汉字变成了什么？如果我写一下汉字变成了什么？如果我写一下汉字变成了什么？如果我写一下汉字变成了什么？如果我写一下汉字变成了什么？如果我写一下汉字变成了什么？如果</p>
-    </div>
+    <p class="text-secondary text-end">{{ comment.created }}</p>
 </div>
 {% endmacro %}
