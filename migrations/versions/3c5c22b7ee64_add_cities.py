@@ -24,6 +24,45 @@ def upgrade():
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('name')
     )
+
+    cities = sa.sql.table('cities',
+                          sa.sql.column('id', sa.Integer),
+                          sa.sql.column('name', sa.String))
+
+    op.bulk_insert(cities, [
+        {'name': 'Aktau'},
+        {'name': 'Aktobe'},
+        {'name': 'Almaty'},
+        {'name': 'Arkalyk'},
+        {'name': 'Atyrau'},
+        {'name': 'Baikonur'},
+        {'name': 'Balqash'},
+        {'name': 'Zhezkazgan'},
+        {'name': 'Karaganda'},
+        {'name': 'Kentau'},
+        {'name': 'Kyzylorda'},
+        {'name': 'Kokshetau'},
+        {'name': 'Kostanay'},
+        {'name': 'Nur-Sultan'},
+        {'name': 'Zhanaozen'},
+        {'name': 'Pavlodar'},
+        {'name': 'Petropavl'},
+        {'name': 'Ridder'},
+        {'name': 'Saran'},
+        {'name': 'Satpayev'},
+        {'name': 'Semey'},
+        {'name': 'Stepnogorsk'},
+        {'name': 'Taldykorgan'},
+        {'name': 'Taraz'},
+        {'name': 'Temirtau'},
+        {'name': 'Turkistan'},
+        {'name': 'Oral'},
+        {'name': 'Oskemen'},
+        {'name': 'Shymkent'},
+        {'name': 'Shakhtinsk'},
+        {'name': 'Schuchinsk'},
+        {'name': 'Ekibastuz'},
+    ])
     # ### end Alembic commands ###
 
 
