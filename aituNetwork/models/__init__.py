@@ -11,3 +11,4 @@ from aituNetwork.models.Cities import Cities
 from aituNetwork.models.EduPrograms import EduPrograms
 from aituNetwork.models.Admins import Admins
 from aituNetwork.models.Comments import Comments
+from aituNetwork.models.PostComments import PostComments
