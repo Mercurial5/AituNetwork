@@ -11,3 +11,11 @@ class Comments(db.Model):
     @staticmethod
     def get(comment_id: int):
         return Comments.query.get(comment_id)
+
+    @staticmethod
+    def create_comment(user_id: int, text: str):
+        comment = Comments(user_id=user_id, text=text)
+        db.session.add(comment)
+        db.session.commit()
+
+        return comment

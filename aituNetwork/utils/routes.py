@@ -1,7 +1,7 @@
 from flask import request, send_file, render_template
 from datetime import datetime
 
-from aituNetwork.models import PostLikes, Users, Messages
+from aituNetwork.models import db, PostLikes, Users, Messages, Comments, Posts
 from aituNetwork.utils import utils
 from utils import picturesDB
 
@@ -57,3 +57,18 @@ def get_messages():
                 messages]
 
     return dict(messages=[message.serialize() for message in messages], html=html)
+
+
+@utils.route('/generate-comment', methods=['POST'])
+def generate_comment():
+    user_id = int(request.form.get('user_id'))
+    author_id = int(request.form.get('author_id'))
+    post_id = int(request.form.get('post_id'))
+    text = request.form.get('text')
+
+    user = Users.get(user_id)
+    author = Users.get(author_id)
+    comment = Comments.create_comment(author_id, text)
+    post = Posts.get(post_id)
+
+    return render_template('comment.html', user=user, author=author, comment=comment, post=post)

@@ -1,6 +1,4 @@
-{% macro comment_macros(user, comment) %}
-{% set author = get_user(comment.user_id) %}
-<div class="comment" id="comment-{{ comment.id }}">
+<div class="comment">
     <div class="d-flex">
         <div class="lhs">
             {% set picture = get_picture(author.id) %}
@@ -40,4 +38,3 @@
     </div>
     <p class="text-secondary text-end">{{ comment.created }}</p>
 </div>
-{% endmacro %}

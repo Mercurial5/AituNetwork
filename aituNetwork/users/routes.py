@@ -3,7 +3,7 @@ from flask import redirect, url_for, flash
 from passlib.hash import sha256_crypt
 from aituNetwork.users import users
 from aituNetwork.models import Users, ProfilePictures, Friends, Posts, UsersChats, Chats, Cities, EduPrograms, Admins, \
-    Messages, PostLikes
+    Messages, PostLikes, Comments, PostComments
 from aituNetwork import db
 from utils import picturesDB, auth_required
 
@@ -225,3 +225,15 @@ def delete_post(post_id):
     Posts.delete_post(post_id)
 
     return redirect(url_for('users.profile', slug=profile_user.slug))
+
+
+@users.route('/add/comment', methods=['POST'])
+def add_comment():
+    post_id = int(request.form.get('post_id'))
+    author_id = int(request.form.get('author_id'))
+    text = request.form.get('text')
+
+    comment = Comments.create_comment(author_id, text)
+    PostComments.add_comment_to_post(post_id, comment.id)
+
+    return 'ok'
