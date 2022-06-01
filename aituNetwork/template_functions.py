@@ -1,4 +1,4 @@
-from aituNetwork.models import Users, ProfilePictures, PostLikes, UsersChats, Messages, Friends, Cities, EduPrograms, Admins
+from aituNetwork.models import Users, ProfilePictures, PostLikes, UsersChats, Messages, Friends, Cities, EduPrograms, Admins, PostComments, Comments
 
 
 def get_user(user_id: int):
@@ -37,3 +37,11 @@ def get_edu_program_name(edu_program_id: int):
 
 def is_admin(user_id: int):
     return Admins.is_admin(user_id)
+
+
+def get_post_comments(post_id: int):
+    return [get_comment(comment_id) for comment_id in PostComments.get(post_id)]
+
+
+def get_comment(comment_id: int):
+    return Comments.get(comment_id)

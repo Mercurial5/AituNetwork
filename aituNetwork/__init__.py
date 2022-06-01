@@ -60,6 +60,9 @@ def create_app():
     from aituNetwork.template_functions import is_admin
     app.jinja_env.globals.update(is_admin=is_admin)
 
+    from aituNetwork.template_functions import get_post_comments
+    app.jinja_env.globals.update(get_post_comments=get_post_comments)
+
     @app.route('/')
     def main():
         return redirect(url_for('auth.login'))
