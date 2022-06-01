@@ -1,4 +1,4 @@
-from aituNetwork.models import Users
+
 from utils.PicturesDB import PicturesDB
 from flask import session, redirect, url_for
 from email.message import EmailMessage
@@ -13,10 +13,12 @@ picturesDB = PicturesDB()
 def auth_required(func):
     @functools.wraps(func)
     def wrapper(*args, **kwargs):
+        from aituNetwork.models import Users
         if session.get('user') is None:
             return redirect(url_for('auth.login'))
 
         user = session['user']
+        print(Users.is_user_correct(user))
         if Users.is_user_correct(user):
             return func(*args, **kwargs)
 

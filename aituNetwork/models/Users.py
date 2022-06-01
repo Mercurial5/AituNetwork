@@ -48,12 +48,9 @@ class Users(db.Model):
 
     @staticmethod
     def is_user_correct(user):
-        check_user = Users.query.get(user)
+        check_user = Users.query.get(user.id)
 
         if check_user is None:
-            return False
-
-        if check_user.slug != user.slug:
             return False
 
         for attr in ['slug', 'password']:
