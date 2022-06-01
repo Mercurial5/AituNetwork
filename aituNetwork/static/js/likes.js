@@ -1,5 +1,5 @@
 $('.like').on('click', function () {
-    let post = $(this).parent().parent().parent();
+    let post = $(this).parent().parent().parent().parent();
     let like_count_element = $(this).find('.like-count');
     let heart = $(this).find('svg');
 
