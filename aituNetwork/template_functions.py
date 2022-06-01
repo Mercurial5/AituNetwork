@@ -40,7 +40,7 @@ def is_admin(user_id: int):
 
 
 def get_post_comments(post_id: int):
-    return [get_comment(comment_id) for comment_id in PostComments.get(post_id)]
+    return [get_comment(comment.comment_id) for comment in PostComments.get(post_id)]
 
 
 def get_comment(comment_id: int):
