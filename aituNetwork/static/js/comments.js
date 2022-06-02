@@ -1,21 +1,25 @@
-$('#comment-toggle').on('click', function () {
-    $('#comment-input').toggle()
+$('.comment-toggle').on('click', function () {
+    let comment_input = $(this).parent().parent().parent().find('.comment-input')
+    console.log(comment_input)
+    comment_input.toggle()
 })
 
-$('#comment-form').on('submit', function () {
+$('.comment-form').on('submit', function () {
     let post = $(this).parent().parent().parent();
     let post_id = post.attr('id').replace('post-', '');
     let textarea = $(this).find('textarea')
 
     let text = textarea.val();
     textarea.val('')
-    generate_comment(post_id, text)
+
+    let comment_section = $(this).parent().parent().find('.comments-section')
+    generate_comment(comment_section, post_id, text)
     save_comment(post_id, current_user, text)
 
     return false;
 })
 
-function generate_comment(post_id, text) {
+function generate_comment(comment_section, post_id, text) {
     $.ajax({
         url: '/utils/generate-comment',
         method: 'POST',
@@ -26,7 +30,7 @@ function generate_comment(post_id, text) {
             text: text
         },
         success: function (data) {
-            $('#comments-section').append(data);
+            comment_section.append(data);
         }
     })
 }
