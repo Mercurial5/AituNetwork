@@ -35,6 +35,14 @@ $('document').ready(function () {
         }
     })
 
+    $("#messageText").keypress(function (e) {
+        if (e.which === 13 && !e.shiftKey) {
+            e.preventDefault();
+
+            $('#sendMessage').click();
+        }
+    });
+
 
 })
 
