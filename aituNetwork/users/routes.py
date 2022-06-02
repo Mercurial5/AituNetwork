@@ -6,7 +6,8 @@ from aituNetwork.models import Users, ProfilePictures, Friends, Posts, UsersChat
     Messages, PostLikes, Comments, PostComments
 from aituNetwork import db
 from utils import picturesDB, auth_required
-import requests, json
+from better_profanity import profanity
+import requests
 
 
 @users.route('/profile/<slug>', methods=['GET'])
@@ -139,6 +140,7 @@ def remove_friend():
 @auth_required
 def add_post():
     post_content = request.form.get('post-content')
+    post_content = profanity.censor(post_content)
 
     Posts.add_post(session['user'].id, post_content)
 
