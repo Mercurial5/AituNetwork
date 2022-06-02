@@ -1,0 +1,29 @@
+{% extends 'main.html' %}
+
+{% block title %} Movies {% endblock %}
+
+{% block body %}
+<div class="container mt-5">
+    <div class="main-body h-100">
+        <div class="row h-100">
+            <div class="col-lg-2">
+                {{ sidebar(user) }}
+            </div>
+            <div class="col-lg-10">
+                <div class="card mb-5">
+                    <div class="card-body">
+                        <div class="header d-flex justify-content-between">
+                            <h3>{{ film.nameEn }} ({{ film.year }})</h3>
+                        </div>
+                        <hr class="my-3">
+                        <div class="video-wrap" style="height: 500px;">
+                            <div id="yohoho" data-kinopoisk="{{ film.filmId }}"></div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script src="//yohoho.cc/yo.js"></script>
+{% endblock %}

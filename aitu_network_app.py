@@ -10,7 +10,7 @@ socketio = SocketIO(app)
 def main():
     host = getenv('HOST')
     port = getenv('PORT')
-    debug = getenv('DEBUG')
+    debug =int(getenv('DEBUG'))
 
     if None in [host, port, debug]:
         print('Host, port or debug values was not set.')
