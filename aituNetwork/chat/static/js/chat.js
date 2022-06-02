@@ -8,6 +8,15 @@ $('document').ready(function () {
     $('#sendMessage').on('click', function () {
         let message_text_element = $('#messageText');
         let message = message_text_element.val();
+
+        if (message.length === 0) {
+            alert('You can\'t send an empty message')
+            return
+        } else if (message.length >= 2000) {
+            alert('You can\'t send message over 2000 symbols')
+            return
+        }
+
         message_text_element.val('');
         add_message(current_user, message);
 
