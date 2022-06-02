@@ -14,7 +14,7 @@
                 <div class="card">
                     <div class="card-body">
                         <div class="header d-flex justify-content-between">
-                            <h3>Friends</h3>
+                            <h3>Friends {% if user.id != friends_of.id %} of {{ friends_of.first_name }} {{ friends_of.last_name }} {% endif %} </h3>
                             <a href="{{ url_for('users.find_friends') }}" class="text-secondary text-decoration-none" role="button">Find friends</a>
                         </div>
                         <hr class="my-3">

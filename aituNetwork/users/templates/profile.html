@@ -82,7 +82,7 @@
                 </div>
                 <div class="card mb-5">
                     <div class="card-body">
-                        <h5 class="d-flex align-items-center">Friends</h5>
+                        <a href="{{ url_for('users.friends', user_id=profile_user.id) }}" class="text-dark text-decoration-none fs-5 d-flex align-items-center">Friends</a>
                         <hr class="my-3">
                         <div class="friends d-flex justify-content-center row row-cols-3">
 

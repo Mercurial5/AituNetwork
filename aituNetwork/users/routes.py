@@ -31,11 +31,13 @@ def profile(slug: str):
                            posts=posts, friend_list=friend_list)
 
 
-@users.route('/friends')
+@users.route('/friends/<user_id>')
 @auth_required
-def friends():
-    friend_list = Friends.get_friend_list(session['user'].id)
-    return render_template('friends.html', user=session['user'], friend_list=friend_list)
+def friends(user_id):
+    friends_of = Users.get(user_id)
+    friend_list = Friends.get_friend_list(friends_of.id)
+
+    return render_template('friends.html', user=session['user'], friends_of=friends_of, friend_list=friend_list)
 
 
 @users.route('/messages')
