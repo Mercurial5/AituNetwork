@@ -9,36 +9,41 @@
             <div class="col-lg-2">
                 {{ sidebar(user) }}
             </div>
-            <div class="col-lg-8">
-                <div class="card-body">
-                    <form class="form-inline mx-auto">
-                        <h2>Find movie</h2>
-                        <input class="form-control form-control-sm mr-3 w-75" type="text" id="search-text-input" name="search-text" placeholder="Search for the movie..." aria-label="Search">
-                        <i class="fa fa-search" aria-hidden="true"></i>
-                    </form>
+            <div class="col-lg-10">
+                <div class="card mb-5">
+                    <div class="card-body">
+                        <div class="header d-flex justify-content-between">
+                            <h3>Find movies</h3>
+                        </div>
+                        <hr class="my-3">
+
+                        <form class="form-inline mx-auto">
+                            <div class="input-group">
+                                <input class="form-control" type="text" id="search-text-input" name="search-text" placeholder="Search for the movie..." aria-label="Search" {% if search_text %} value="{{ search_text }}" {% endif %}}>
+                            </div>
+                        </form>
+
+                    </div>
                 </div>
-                <div class="container">
-                    <div class="row">
+
+                <div class="row row-cols-auto mt-3">
                     {% for film in films %}
-                        <div class="col-xs-4 col-sm-4 col-md-4 col-centered">
-                            <div class="card mb-4">
-                                <div class="d-flex align-items-center">
-                                    <a href="{{ url_for('users.movies', filmId=film.filmId) }}" class="text-secondary text-decoration-none" role="button">
-                                        <img style="width: 70%; height: 70%" class="img-responsive" src="{{ film.posterUrlPreview }}" alt="{{ film.nameEn }}">
-                                        <span>{{ film.nameEn}}
-                                                ({{ film.year }})
-                                        </span>
-                                    </a>
-                                </div>
+                    <a href="{{ url_for('users.movies', filmId=film.filmId) }}"
+                       class="text-secondary text-decoration-none" role="button">
+                        <div class="col mb-4 pe-3 d-flex flex-column justify-content-center">
+                            <img src="{{ film.posterUrlPreview }}" alt="{{ film.nameEn }}" width="175" height="250">
+                            <div class="film-info mt-2">
+                                <h5 class="name" style="width: 150px">{{ film.nameEn }}</h5>
+                                <h6 class="year">{{ film.year }}</h6>
                             </div>
                         </div>
+                    </a>
                     {% endfor %}
-                    </div>
                 </div>
             </div>
         </div>
     </div>
 </div>
 
-<script src="//yohoho.cc/yo.js"> </script>
+<script src="//yohoho.cc/yo.js"></script>
 {% endblock %}

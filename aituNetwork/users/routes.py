@@ -143,14 +143,13 @@ def movies_search():
     if not search_text:
         params = {"type": "TOP_100_POPULAR_FILMS"}
         r = requests.get(url_top, params=params, headers=headers).json()
-        return render_template('movies.html', user=session['user'], films=r['films'])
     else:
         params = {"keyword": search_text}
         r = requests.get(url_search, params=params, headers=headers).json()
         films_list = []
         for field in r['films']:
             films_list.append(field)
-        return render_template('movies.html', user=session['user'], films=films_list)
+    return render_template('movies.html', user=session['user'], films=r['films'], search_text=search_text)
 
 
 

@@ -3,24 +3,27 @@
 {% block title %} Movies {% endblock %}
 
 {% block body %}
-<div class="container">
-    <div class="row">
-        <div class="col-lg-6">
-            <div class="card-body">
-                <div id="yohoho" data-kinopoisk="{{ film.filmId }}"></div>
+<div class="container mt-5">
+    <div class="main-body h-100">
+        <div class="row h-100">
+            <div class="col-lg-2">
+                {{ sidebar(user) }}
             </div>
-        </div>
-        <div class="col-lg-6">
-            <div class="card-body pb-0">
-                <h4 class=""card-title>{{ film.nameEn}}</h4>
-                <h6>({{ film.year}})</h6>
-                <img style="width: 50%; height: 50%" class="img-responsive" src="{{ film.posterUrlPreview }}" alt="{{ film.nameEn }}">
-                <p class="text-center text-secondary mb-2 p-2">
-                    {{ film.description }}
-                </p>
+            <div class="col-lg-10">
+                <div class="card mb-5">
+                    <div class="card-body">
+                        <div class="header d-flex justify-content-between">
+                            <h3>{{ film.nameEn }} ({{ film.year }})</h3>
+                        </div>
+                        <hr class="my-3">
+                        <div class="video-wrap" style="height: 500px;">
+                            <div id="yohoho" data-kinopoisk="{{ film.filmId }}"></div>
+                        </div>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
 </div>
-<script src="//yohoho.cc/yo.js"> </script>
+<script src="//yohoho.cc/yo.js"></script>
 {% endblock %}
