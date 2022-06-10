@@ -167,15 +167,13 @@ def movies_search():
     return render_template('movies.html', user=session['user'], films=r['films'], search_text=search_text)
 
 
-
 @users.route('/movies/<filmId>', methods=['GET', 'POST'])
 @auth_required
 def movies(filmId):
-    api_url = "https://kinopoiskapiunofficial.tech/api/v2.1/films/"+filmId
+    api_url = "https://kinopoiskapiunofficial.tech/api/v2.1/films/" + filmId
     headers = {'X-API-KEY': '1af58e0d-6f44-4ec0-9a57-5a51c892f857', 'Content-Type': 'application/json'}
     params = {"id": filmId}
     r = requests.get(api_url, headers=headers, params=params).json()
-    print(r)
     return render_template('movie_player.html', user=session['user'], film=r['data'])
 
 

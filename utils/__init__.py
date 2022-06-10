@@ -18,7 +18,6 @@ def auth_required(func):
             return redirect(url_for('auth.login'))
 
         user = session['user']
-        print(Users.is_user_correct(user))
         if Users.is_user_correct(user):
             return func(*args, **kwargs)
 
