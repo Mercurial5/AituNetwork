@@ -114,28 +114,6 @@ def settings(user_id: int):
     return redirect(url_for('users.settings'))
 
 
-@users.route('/add/friend')
-@auth_required
-def add_friend():
-    user_id = request.values.get('user_id')
-    friend_id = request.values.get('friend_id')
-
-    Friends.add_friend(user_id, friend_id)
-
-    return redirect(url_for('users.profile', slug=Users.query.get(friend_id).slug))
-
-
-@users.route('/remove/friend')
-@auth_required
-def remove_friend():
-    user_id = request.values.get('user_id')
-    friend_id = request.values.get('friend_id')
-
-    Friends.remove_friend(user_id, friend_id)
-
-    return redirect(url_for('users.profile', slug=Users.query.get(friend_id).slug))
-
-
 @users.route('/add/post', methods=['POST'])
 @auth_required
 def add_post():
