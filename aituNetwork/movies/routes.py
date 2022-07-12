@@ -7,9 +7,9 @@ import requests
 headers = {'X-API-KEY': '1af58e0d-6f44-4ec0-9a57-5a51c892f857', 'Content-Type': 'application/json'}
 
 
-@movies.route('/movies')
+@movies.route('/')
 @auth_required
-def movies():
+def movie_list():
     search_text = request.values.get('search-text')
 
     url = 'https://kinopoiskapiunofficial.tech/api/v2.1/films/'
@@ -24,7 +24,7 @@ def movies():
     return render_template('movies.html', user=session['user'], films=response['films'], search_text=search_text)
 
 
-@movies.route('/movies/<film_id>')
+@movies.route('/<film_id>')
 @auth_required
 def movie(film_id):
     api_url = 'https://kinopoiskapiunofficial.tech/api/v2.1/films/' + film_id

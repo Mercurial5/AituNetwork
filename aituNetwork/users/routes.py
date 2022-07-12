@@ -113,33 +113,10 @@ def settings(user_id: int):
     return redirect(url_for('users.settings'))
 
 
-@users.route('/movies', methods=['GET', 'POST'])
+@users.route('/movies')
 @auth_required
-def movies_search():
-    url_search = 'https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword'
-    url_top = 'https://kinopoiskapiunofficial.tech/api/v2.1/films/top'
-    headers = {'X-API-KEY': '1af58e0d-6f44-4ec0-9a57-5a51c892f857', 'Content-Type': 'application/json'}
-    search_text = request.values.get("search-text")
-    if not search_text:
-        params = {'type': 'TOP_100_POPULAR_FILMS'}
-        r = requests.get(url_top, params=params, headers=headers).json()
-    else:
-        params = {'keyword': search_text}
-        r = requests.get(url_search, params=params, headers=headers).json()
-        films_list = []
-        for field in r['films']:
-            films_list.append(field)
-    return render_template('movies.html', user=session['user'], films=r['films'], search_text=search_text)
-
-
-@users.route('/movies/<film_id>', methods=['GET', 'POST'])
-@auth_required
-def movies(film_id):
-    api_url = 'https://kinopoiskapiunofficial.tech/api/v2.1/films/' + film_id
-    headers = {'X-API-KEY': '1af58e0d-6f44-4ec0-9a57-5a51c892f857', 'Content-Type': 'application/json'}
-    params = {'id': film_id}
-    r = requests.get(api_url, headers=headers, params=params).json()
-    return render_template('movie_player.html', user=session['user'], film=r['data'])
+def movies():
+    return redirect(url_for('movies.movie_list'))
 
 
 @users.route('/find-friends')
