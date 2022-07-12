@@ -3,8 +3,6 @@ $('.like').on('click', function () {
     let like_count_element = $(this).find('.like-count');
     let heart = $(this).find('svg');
 
-    console.log(post.attr('class').search('likedasd'))
-
     if (post.attr('class').search('liked') === -1) {
         like(post, like_count_element, heart);
     } else {
@@ -19,8 +17,7 @@ function like(post, like_count_element, heart) {
         url: '/utils/like',
         method: 'POST',
         data: {
-            'post_id': post_id,
-            'user_id': current_user
+            'post_id': post_id
         }
     });
 
@@ -42,8 +39,7 @@ function unlike(post, like_count_element, heart) {
         url: '/utils/unlike',
         method: 'POST',
         data: {
-            'post_id': post_id,
-            'user_id': current_user
+            'post_id': post_id
         }
     });
 
