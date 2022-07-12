@@ -37,7 +37,7 @@ function generate_comment(comment_section, post_id, text) {
 
 function save_comment(post_id, text) {
     $.ajax({
-        url: '/users/add/comment',
+        url: '/crud/add/comment',
         method: 'POST',
         data: {
             post_id: post_id,

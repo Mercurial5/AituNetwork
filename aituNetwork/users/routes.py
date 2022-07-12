@@ -2,11 +2,10 @@ from flask import request, render_template, session
 from flask import redirect, url_for, flash
 from passlib.hash import sha256_crypt
 from aituNetwork.users import users
-from aituNetwork.models import Users, ProfilePictures, Friends, Posts, UsersChats, Chats, Cities, EduPrograms, Admins, \
-    Messages, PostLikes, Comments, PostComments
+from aituNetwork.models import Users, ProfilePictures, Friends, Posts, UsersChats, Chats, Cities, EduPrograms, Admins
 from aituNetwork import db
 from utils import picturesDB, auth_required
-from better_profanity import profanity
+
 import requests
 
 
@@ -114,67 +113,10 @@ def settings(user_id: int):
     return redirect(url_for('users.settings'))
 
 
-@users.route('/add/friend')
+@users.route('/movies')
 @auth_required
-def add_friend():
-    user_id = request.values.get('user_id')
-    friend_id = request.values.get('friend_id')
-
-    Friends.add_friend(user_id, friend_id)
-
-    return redirect(url_for('users.profile', slug=Users.query.get(friend_id).slug))
-
-
-@users.route('/remove/friend')
-@auth_required
-def remove_friend():
-    user_id = request.values.get('user_id')
-    friend_id = request.values.get('friend_id')
-
-    Friends.remove_friend(user_id, friend_id)
-
-    return redirect(url_for('users.profile', slug=Users.query.get(friend_id).slug))
-
-
-@users.route('/add/post', methods=['POST'])
-@auth_required
-def add_post():
-    post_content = request.form.get('post-content')
-    post_content = profanity.censor(post_content)
-
-    Posts.add_post(session['user'].id, post_content)
-
-    flash('Your post is added!', 'success')
-    return redirect(url_for('users.profile', slug=session['user'].slug))
-
-
-@users.route('/movies', methods=['GET', 'POST'])
-@auth_required
-def movies_search():
-    url_search = "https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword"
-    url_top = "https://kinopoiskapiunofficial.tech/api/v2.1/films/top"
-    headers = {'X-API-KEY': '1af58e0d-6f44-4ec0-9a57-5a51c892f857', 'Content-Type': 'application/json'}
-    search_text = request.values.get("search-text")
-    if not search_text:
-        params = {"type": "TOP_100_POPULAR_FILMS"}
-        r = requests.get(url_top, params=params, headers=headers).json()
-    else:
-        params = {"keyword": search_text}
-        r = requests.get(url_search, params=params, headers=headers).json()
-        films_list = []
-        for field in r['films']:
-            films_list.append(field)
-    return render_template('movies.html', user=session['user'], films=r['films'], search_text=search_text)
-
-
-@users.route('/movies/<filmId>', methods=['GET', 'POST'])
-@auth_required
-def movies(filmId):
-    api_url = "https://kinopoiskapiunofficial.tech/api/v2.1/films/" + filmId
-    headers = {'X-API-KEY': '1af58e0d-6f44-4ec0-9a57-5a51c892f857', 'Content-Type': 'application/json'}
-    params = {"id": filmId}
-    r = requests.get(api_url, headers=headers, params=params).json()
-    return render_template('movie_player.html', user=session['user'], film=r['data'])
+def movies():
+    return redirect(url_for('movies.movie_list'))
 
 
 @users.route('/find-friends')
@@ -207,92 +149,3 @@ def find_friends():
     return render_template('find-friends.html', user=user, users=users_list, search=search, cities=cities,
                            edu_programs=edu_programs, selected_city=city, selected_course=course,
                            selected_edu_program=edu_program)
-
-
-@users.route('/delete_user/<user_id>')
-@auth_required
-def delete_user(user_id: int):
-    user = session['user']
-    profile_user = Users.get(user_id)
-
-    if profile_user is None:
-        return 'User not found'
-
-    if not Admins.is_admin(user.id):
-        return redirect(url_for('users.profile', slug=profile_user.id))
-
-    # delete from Users
-    Users.delete_user(profile_user.id)
-
-    # delete from Friends
-    Friends.delete_friends_for_deleted_user(user_id)
-
-    # delete from UsersChats/Chats/Messages
-    chat_list = UsersChats.delete_chats_for_deleted_user(user_id)
-    [Chats.delete_chat(chat.chat_id) for chat in chat_list]
-    [Messages.delete_messages_in_chat(chat.chat_id) for chat in chat_list]
-
-    # delete from Posts/PostLikes
-    posts_id_list = Posts.delete_posts_for_deleted_user(user_id)
-    PostLikes.delete_likes_for_deleted_user(user_id, posts_id_list)
-
-    # delete from Comments/PostComments
-    comments_id_list = Comments.delete_for_deleted_user(user_id)
-    [PostComments.delete_comment_from_post(comment_id[0]) for comment_id in comments_id_list]
-
-    # delete from ProfilePictures
-    pictures = ProfilePictures.delete_pictures_for_deleted_user(user_id)
-    [picturesDB.delete_picture('profile-pictures', picture.name) for picture in pictures]
-
-    db.session.commit()
-
-    return 'User was deleted'
-
-
-@users.route('/delete-post/<post_id>')
-@auth_required
-def delete_post(post_id):
-    user = session['user']
-    post = Posts.get(post_id)
-    profile_user = Users.get(post.author_id)
-
-    if user.id != post.author_id and not Admins.is_admin(user.id):
-        flash('You don\'t access', 'danger')
-        return redirect(url_for('users.profile', slug=profile_user.slug))
-
-    Posts.delete_post(post_id)
-
-    return redirect(url_for('users.profile', slug=profile_user.slug))
-
-
-@users.route('/add/comment', methods=['POST'])
-@auth_required
-def add_comment():
-    post_id = int(request.form.get('post_id'))
-    author_id = session['user'].id
-    text = request.form.get('text')
-
-    comment = Comments.create_comment(author_id, text)
-    PostComments.add_comment_to_post(post_id, comment.id)
-
-    return 'ok'
-
-
-@users.route('/delete/comment')
-@auth_required
-def delete_comment():
-    comment_id = request.values.get('comment_id')
-
-    user = session['user']
-    comment = Comments.get(comment_id)
-
-    if comment is None:
-        return 'Comment not found'
-
-    if comment.user_id != user.id and not Admins.is_admin(user.id):
-        return 'You don\'t have an access'
-
-    Comments.delete_comment(comment_id)
-    PostComments.delete_comment_from_post(comment_id)
-
-    return redirect(url_for('main.home'))

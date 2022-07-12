@@ -29,7 +29,7 @@
 
                 <div class="row row-cols-auto mt-3">
                     {% for film in films %}
-                    <a href="{{ url_for('users.movies', filmId=film.filmId) }}"
+                    <a href="{{ url_for('movies.movie', film_id=film.filmId) }}"
                        class="text-secondary text-decoration-none" role="button">
                         <div class="col mb-4 pe-3 d-flex flex-column justify-content-center">
                             <img src="{{ film.posterUrlPreview }}" alt="{{ film.nameEn }}" width="175" height="250">
