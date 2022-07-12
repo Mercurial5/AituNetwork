@@ -32,6 +32,8 @@ def create_app():
     app.register_blueprint(utils, url_prefix='/utils')
     from aituNetwork.chat import chat
     app.register_blueprint(chat, url_prefix='/chat')
+    from aituNetwork.crud import crud
+    app.register_blueprint(crud, url_prefix='/crud')
 
     from aituNetwork.template_functions import get_picture
     app.jinja_env.globals.update(get_picture=get_picture)
