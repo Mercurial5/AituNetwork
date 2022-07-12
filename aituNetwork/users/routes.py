@@ -2,8 +2,7 @@ from flask import request, render_template, session
 from flask import redirect, url_for, flash
 from passlib.hash import sha256_crypt
 from aituNetwork.users import users
-from aituNetwork.models import Users, ProfilePictures, Friends, Posts, UsersChats, Chats, Cities, EduPrograms, Admins, \
-    Messages, PostLikes, Comments, PostComments
+from aituNetwork.models import Users, ProfilePictures, Friends, Posts, UsersChats, Chats, Cities, EduPrograms, Admins
 from aituNetwork import db
 from utils import picturesDB, auth_required
 
@@ -117,15 +116,15 @@ def settings(user_id: int):
 @users.route('/movies', methods=['GET', 'POST'])
 @auth_required
 def movies_search():
-    url_search = "https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword"
-    url_top = "https://kinopoiskapiunofficial.tech/api/v2.1/films/top"
+    url_search = 'https://kinopoiskapiunofficial.tech/api/v2.1/films/search-by-keyword'
+    url_top = 'https://kinopoiskapiunofficial.tech/api/v2.1/films/top'
     headers = {'X-API-KEY': '1af58e0d-6f44-4ec0-9a57-5a51c892f857', 'Content-Type': 'application/json'}
     search_text = request.values.get("search-text")
     if not search_text:
-        params = {"type": "TOP_100_POPULAR_FILMS"}
+        params = {'type': 'TOP_100_POPULAR_FILMS'}
         r = requests.get(url_top, params=params, headers=headers).json()
     else:
-        params = {"keyword": search_text}
+        params = {'keyword': search_text}
         r = requests.get(url_search, params=params, headers=headers).json()
         films_list = []
         for field in r['films']:
@@ -133,12 +132,12 @@ def movies_search():
     return render_template('movies.html', user=session['user'], films=r['films'], search_text=search_text)
 
 
-@users.route('/movies/<filmId>', methods=['GET', 'POST'])
+@users.route('/movies/<film_id>', methods=['GET', 'POST'])
 @auth_required
-def movies(filmId):
-    api_url = "https://kinopoiskapiunofficial.tech/api/v2.1/films/" + filmId
+def movies(film_id):
+    api_url = 'https://kinopoiskapiunofficial.tech/api/v2.1/films/' + film_id
     headers = {'X-API-KEY': '1af58e0d-6f44-4ec0-9a57-5a51c892f857', 'Content-Type': 'application/json'}
-    params = {"id": filmId}
+    params = {'id': film_id}
     r = requests.get(api_url, headers=headers, params=params).json()
     return render_template('movie_player.html', user=session['user'], film=r['data'])
 
