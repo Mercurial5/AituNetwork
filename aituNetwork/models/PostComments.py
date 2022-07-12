@@ -20,3 +20,8 @@ class PostComments(db.Model):
     def delete_comment_from_post(comment_id: int):
         PostComments.query.filter_by(comment_id=comment_id).delete()
         db.session.commit()
+
+    @staticmethod
+    def delete_comments_from_post(post_id: int):
+        PostComments.query.filter_by(post_id=post_id).delete()
+        db.session.commit()
