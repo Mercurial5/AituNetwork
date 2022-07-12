@@ -5,20 +5,25 @@ from aituNetwork.models import Users, Messages
 from aituNetwork import db
 from __main__ import socketio
 
+from utils import auth_required
+
 clients = dict()
 
 
 @socketio.on('connect')
+@auth_required
 def connect():
-    user_id = int(request.args.get('user_id'))
+    user_id = session['user'].id
     clients[user_id] = request.sid
-    Users.update_user_info(session['user'].id, dict(last_online='now'))
+    Users.update_user_info(user_id, dict(last_online='now'))
 
 
 @socketio.on('disconnect')
+@auth_required
 def disconnect():
-    Users.update_user_info(session['user'].id, dict(last_online=str(datetime.now().replace(microsecond=0))))
-    user_id = request.args.get('user_id')
+    user_id = session['user'].id
+    Users.update_user_info(user_id, dict(last_online=str(datetime.now().replace(microsecond=0))))
+
     if clients.get(user_id):
         del clients[user_id]
 
