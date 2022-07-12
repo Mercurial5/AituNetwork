@@ -1,9 +1,11 @@
-from flask import request, send_file, render_template
+from flask import request, send_file, render_template, session
 from datetime import datetime
 
-from aituNetwork.models import db, PostLikes, Users, Messages, Comments, Posts
+from aituNetwork.models import PostLikes, Users, Messages, Comments, Posts
 from aituNetwork.utils import utils
 from utils import picturesDB
+
+from utils import auth_required
 
 
 @utils.route('/get-picture/<filename>', methods=['GET'])
@@ -13,9 +15,10 @@ def get_picture(filename: str):
 
 
 @utils.route('/like', methods=['POST'])
+@auth_required
 def like():
     post_id = int(request.form.get('post_id'))
-    user_id = int(request.form.get('user_id'))
+    user_id = session['user'].id
 
     PostLikes.add(user_id, post_id)
 
@@ -23,9 +26,10 @@ def like():
 
 
 @utils.route('/unlike', methods=['POST'])
+@auth_required
 def unlike():
     post_id = int(request.form.get('post_id'))
-    user_id = int(request.form.get('user_id'))
+    user_id = session['user'].id
 
     PostLikes.remove(user_id, post_id)
 
