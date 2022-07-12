@@ -14,7 +14,7 @@ $('.comment-form').on('submit', function () {
 
     let comment_section = $(this).parent().parent().find('.comments-section')
     generate_comment(comment_section, post_id, text)
-    save_comment(post_id, current_user, text)
+    save_comment(post_id, text)
 
     return false;
 })
@@ -35,13 +35,12 @@ function generate_comment(comment_section, post_id, text) {
     })
 }
 
-function save_comment(post_id, author_id, text) {
+function save_comment(post_id, text) {
     $.ajax({
         url: '/users/add/comment',
         method: 'POST',
         data: {
             post_id: post_id,
-            author_id: author_id,
             text: text
         }
     })

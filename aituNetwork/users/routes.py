@@ -266,9 +266,10 @@ def delete_post(post_id):
 
 
 @users.route('/add/comment', methods=['POST'])
+@auth_required
 def add_comment():
     post_id = int(request.form.get('post_id'))
-    author_id = int(request.form.get('author_id'))
+    author_id = session['user'].id
     text = request.form.get('text')
 
     comment = Comments.create_comment(author_id, text)
