@@ -14,8 +14,8 @@ def get_picture(filename: str):
 
 @utils.route('/like', methods=['POST'])
 def like():
-    post_id = int(request.form.get('post-id'))
-    user_id = int(request.form.get('user-id'))
+    post_id = int(request.form.get('post_id'))
+    user_id = int(request.form.get('user_id'))
 
     PostLikes.add(user_id, post_id)
 
@@ -24,8 +24,8 @@ def like():
 
 @utils.route('/unlike', methods=['POST'])
 def unlike():
-    post_id = int(request.form.get('post-id'))
-    user_id = int(request.form.get('user-id'))
+    post_id = int(request.form.get('post_id'))
+    user_id = int(request.form.get('user_id'))
 
     PostLikes.remove(user_id, post_id)
 

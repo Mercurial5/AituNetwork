@@ -19,8 +19,8 @@ function like(post, like_count_element, heart) {
         url: '/utils/like',
         method: 'POST',
         data: {
-            'post-id': post_id,
-            'user-id': current_user
+            'post_id': post_id,
+            'user_id': current_user
         }
     });
 
@@ -42,8 +42,8 @@ function unlike(post, like_count_element, heart) {
         url: '/utils/unlike',
         method: 'POST',
         data: {
-            'post-id': post_id,
-            'user-id': current_user
+            'post_id': post_id,
+            'user_id': current_user
         }
     });
 
