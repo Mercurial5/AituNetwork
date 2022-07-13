@@ -20,21 +20,29 @@ class PicturesDB:
                 os.mkdir(table_path)
                 print('Table', table, 'created!')
 
-    def add_picture(self, table: str, picture: FileStorage) -> Union[bool, str]:
+    def add_picture(self, table: str, picture: FileStorage) -> Union[bool, tuple]:
         if table not in self.tables:
             print('Table', table, 'not in Tables list!')
             return False
 
-        filename = uuid4().__str__() + '.' + picture.filename.split('.')[-1]
-
         table_path = os.path.join(self.database_path, table)
-        picture.save(os.path.join(table_path, filename))
 
-        return filename
+        directory_name = uuid4().__str__()
+        directory_path = os.path.join(table_path, directory_name)
+        os.mkdir(directory_path)
 
-    def get_picture_path(self, table: str, filename: str) -> str:
+        picture_extension = picture.filename.split('.')[-1]
+
+        picture.save(os.path.join(directory_path, 'original.' + picture_extension))
+
+        return directory_name, picture_extension
+
+    def get_picture_path(self, table: str, directory_name: str, extension: str, size: Union[int, None] = None) -> str:
         path = os.path.join(self.database_path, table)
-        path = os.path.join(path, filename)
+        path = os.path.join(path, directory_name)
+
+        path = os.path.join(path, str(size) + '.' + extension if size else 'original.' + extension)
+
         return path
 
     def delete_picture(self, table: str, filename: str):
