@@ -1,6 +1,7 @@
 from werkzeug.datastructures import FileStorage
 from typing import Union
 from uuid import uuid4
+import shutil
 import os
 
 
@@ -45,8 +46,8 @@ class PicturesDB:
 
         return path
 
-    def delete_picture(self, table: str, filename: str):
+    def delete_picture(self, table: str, directory_path: str):
         path = os.path.join(self.database_path, table)
-        path = os.path.join(path, filename)
+        path = os.path.join(path, directory_path)
 
-        os.remove(path)
+        shutil.rmtree(path)
