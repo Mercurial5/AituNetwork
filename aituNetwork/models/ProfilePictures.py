@@ -6,6 +6,7 @@ class ProfilePictures(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     user_id = db.Column(db.Integer, nullable=False)
     name = db.Column(db.String(255), unique=True, nullable=False)
+    extension = db.Column(db.String(255), nullable=False)
     added = db.Column(db.DATETIME, nullable=False, default=datetime.now)
 
     @staticmethod
