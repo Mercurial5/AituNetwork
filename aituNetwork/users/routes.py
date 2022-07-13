@@ -19,7 +19,7 @@ def profile(slug: str):
 
     profile_picture = ProfilePictures.get_profile_picture(profile_user.id)
     if profile_picture:
-        profile_user.profile_picture = profile_picture.name
+        profile_user.profile_picture = profile_picture
 
     posts = Posts.get_posts(profile_user.id)
 
@@ -74,8 +74,8 @@ def settings(user_id: int):
 
     picture = request.files.get('profile-picture')
     if picture:
-        picture_name = picturesDB.add_picture('profile-pictures', picture)
-        profile_picture = ProfilePictures(user_id=target_user.id, name=picture_name)
+        picture_name, picture_extension = picturesDB.add_picture('profile-pictures', picture)
+        profile_picture = ProfilePictures(user_id=target_user.id, name=picture_name, extension=picture_extension)
         db.session.add(profile_picture)
 
     slug = request.form.get('slug')
