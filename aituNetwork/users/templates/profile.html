@@ -67,8 +67,11 @@
                                         Options
                                     </button>
                                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton">
-                                        <li><a class="dropdown-item" role="button" onclick="confirm_delete()">Delete user</a></li>
-                                        <li><a class="dropdown-item" href="{{ url_for('users.settings', user_id=profile_user.id) }}">Change info</a></li>
+                                        <li><a class="dropdown-item" role="button" onclick="confirm_delete()">Delete
+                                            user</a></li>
+                                        <li><a class="dropdown-item"
+                                               href="{{ url_for('users.settings', user_id=profile_user.id) }}">Change
+                                            info</a></li>
                                     </ul>
                                 </div>
                                 {% endif %}
@@ -82,33 +85,34 @@
                 </div>
                 <div class="card mb-5">
                     <div class="card-body">
-                        <a href="{{ url_for('users.friends', user_id=profile_user.id) }}" class="text-dark text-decoration-none fs-5 d-flex align-items-center">Friends</a>
+                        <a href="{{ url_for('users.friends', user_id=profile_user.id) }}"
+                           class="text-dark text-decoration-none fs-5 d-flex align-items-center">Friends</a>
                         <hr class="my-3">
                         <div class="friends d-flex justify-content-center row row-cols-3">
 
                             {% if friend_list|length == 0 %}
-                            {{ profile_user.first_name }} does not have any friends.
+                                {{ profile_user.first_name }} does not have any friends.
                             {% endif %}
 
                             {% for friend in friend_list %}
-                            {% set friend = get_user(friend.user_id) %}
-                            {% set picture = get_picture(friend.id) %}
-                            <a href="{{ url_for('users.profile', slug=friend.slug) }}"
-                               class="friend mb-3 text-dark text-decoration-none">
-                                <div class="friend-picture d-flex justify-content-center">
-                                    {% if picture %}
-                                    <img src="{{ url_for('utils.get_picture', filename=get_picture(friend.id).name) }}"
-                                         alt="Admin"
-                                         class="rounded-circle" width="80" height="80">
-                                    {% else %}
-                                    <img src="https://i.pinimg.com/originals/fc/04/73/fc047347b17f7df7ff288d78c8c281cf.png"
-                                         alt="Admin"
-                                         class="rounded-circle" width="80">
-                                    {% endif %}
-                                </div>
-                                <h6 class="first-name text-center m-0">{{ friend.first_name }}</h6>
-                                <h6 class="last-name text-center">{{ friend.last_name }}</h6>
-                            </a>
+                                {% set friend = get_user(friend.user_id) %}
+                                {% set picture = get_picture(friend.id) %}
+                                <a href="{{ url_for('users.profile', slug=friend.slug) }}"
+                                   class="friend mb-3 text-dark text-decoration-none">
+                                    <div class="friend-picture d-flex justify-content-center">
+                                        {% if picture %}
+                                        <img src="{{ url_for('utils.get_picture', filename=get_picture(friend.id).name) }}"
+                                             alt="Admin"
+                                             class="rounded-circle" width="64" height="64">
+                                        {% else %}
+                                        <img src="https://i.pinimg.com/originals/fc/04/73/fc047347b17f7df7ff288d78c8c281cf.png"
+                                             alt="Admin"
+                                             class="rounded-circle" width="64">
+                                        {% endif %}
+                                    </div>
+                                    <h6 class="first-name text-center m-0 mt-2">{{ friend.first_name }}</h6>
+                                    <h6 class="last-name text-center">{{ friend.last_name }}</h6>
+                                </a>
                             {% endfor %}
                         </div>
                     </div>
@@ -208,7 +212,12 @@
 </div>
 
 <script>
-    let profile_user_id = {{ profile_user.id }};
+    let profile_user_id = {
+    {
+        profile_user.id
+    }
+    }
+    ;
 </script>
 
 <script src="/static/js/likes.js"></script>
