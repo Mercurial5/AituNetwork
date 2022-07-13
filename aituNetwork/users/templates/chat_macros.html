@@ -7,7 +7,7 @@
 <a href="{{ url_for('chat.chat', chat_id=chat.id) }}" class="chat-block d-flex text-dark text-decoration-none hover-blackout p-2" role="button">
     <div class="picture me-3">
         {% if picture %}
-        <img src="{{ url_for('utils.get_picture', table='profile-pictures', filename=picture.name) }}"
+        <img src="{{ url_for('utils.get_picture', directory_path=picture.name, extension=picture.extension) }}"
              class="rounded-circle" width="64" height="64">
         {% else %}
         <img src="https://i.pinimg.com/originals/fc/04/73/fc047347b17f7df7ff288d78c8c281cf.png" class="rounded-circle"

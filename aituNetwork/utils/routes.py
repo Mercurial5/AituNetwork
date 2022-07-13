@@ -8,9 +8,11 @@ from utils import picturesDB
 from utils import auth_required
 
 
-@utils.route('/get-picture/<filename>', methods=['GET'])
-def get_picture(filename: str):
-    path = picturesDB.get_picture_path('profile-pictures', filename)
+@utils.route('/get-picture', methods=['GET'])
+def get_picture():
+    directory_path = request.values.get('directory_path')
+    extension = request.values.get('extension')
+    path = picturesDB.get_picture_path('profile-pictures', directory_path, extension)
     return send_file(path, mimetype='image/gif')
 
 

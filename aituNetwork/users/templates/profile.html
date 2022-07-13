@@ -19,7 +19,7 @@
                     <div class="card-body">
                         <div class="d-flex flex-column align-items-center text-center">
                             {% if profile_user.profile_picture %}
-                            <img src="{{ url_for('utils.get_picture', filename=profile_user.profile_picture) }}"
+                            <img src="{{ url_for('utils.get_picture', directory_path=profile_user.profile_picture.name, extension=profile_user.profile_picture.extension) }}"
                                  alt="Admin"
                                  class="p-1 w-75">
                             {% else %}
@@ -101,7 +101,7 @@
                                    class="friend mb-3 text-dark text-decoration-none">
                                     <div class="friend-picture d-flex justify-content-center">
                                         {% if picture %}
-                                        <img src="{{ url_for('utils.get_picture', filename=get_picture(friend.id).name) }}"
+                                        <img src="{{ url_for('utils.get_picture', directory_path=picture.name, extension=picture.extension) }}"
                                              alt="Admin"
                                              class="rounded-circle" width="64" height="64">
                                         {% else %}
