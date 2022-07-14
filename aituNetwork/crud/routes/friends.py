@@ -1,4 +1,4 @@
-from flask import request, redirect, url_for
+from flask import request, redirect, url_for, session
 from aituNetwork.crud import crud
 from aituNetwork.models import Users, Friends
 
@@ -8,7 +8,7 @@ from utils import auth_required
 @crud.route('/add/friend')
 @auth_required
 def add_friend():
-    user_id = request.values.get('user_id')
+    user_id = session['user'].id
     friend_id = request.values.get('friend_id')
 
     Friends.add_friend(user_id, friend_id)
@@ -19,7 +19,7 @@ def add_friend():
 @crud.route('/delete/friend')
 @auth_required
 def delete_friend():
-    user_id = request.values.get('user_id')
+    user_id = session['user'].id
     friend_id = request.values.get('friend_id')
 
     Friends.remove_friend(user_id, friend_id)
