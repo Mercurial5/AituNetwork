@@ -1,7 +1,7 @@
 from flask import request, redirect, url_for, session, flash
 from better_profanity import profanity
 
-from aituNetwork.models import Posts, Users, Admins
+from aituNetwork.models import Posts, PostLikes, PostComments, Users, Admins
 from aituNetwork.crud import crud
 from utils import auth_required
 
@@ -30,5 +30,7 @@ def delete_post(post_id):
         return redirect(url_for('users.profile', slug=profile_user.slug))
 
     Posts.delete_post(post_id)
+    PostLikes.delete_likes_from_post(post_id)
+    PostComments.delete_comments_from_post(post_id)
 
     return redirect(url_for('users.profile', slug=profile_user.slug))

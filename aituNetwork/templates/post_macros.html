@@ -9,8 +9,8 @@
                 {% set picture = get_picture(post_user.id) %}
 
                 {% if picture %}
-                <img src="{{ url_for('utils.get_picture', filename=picture.name) }}"
-                     class="rounded-circle" width="64" height="64">
+                <img src="{{ url_for('utils.get_picture', directory_path=picture.name, extension=picture.extension, size=64) }}"
+                     class="rounded-circle">
                 {% else %}
                 <img src="https://i.pinimg.com/originals/fc/04/73/fc047347b17f7df7ff288d78c8c281cf.png"
                      class="rounded-circle" width="64" height="64">

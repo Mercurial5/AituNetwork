@@ -1,6 +1,8 @@
 from werkzeug.datastructures import FileStorage
 from typing import Union
 from uuid import uuid4
+from PIL import Image
+import shutil
 import os
 
 
@@ -20,25 +22,38 @@ class PicturesDB:
                 os.mkdir(table_path)
                 print('Table', table, 'created!')
 
-    def add_picture(self, table: str, picture: FileStorage) -> Union[bool, str]:
+    def add_picture(self, table: str, picture: FileStorage) -> Union[bool, tuple]:
         if table not in self.tables:
             print('Table', table, 'not in Tables list!')
             return False
 
-        filename = uuid4().__str__() + '.' + picture.filename.split('.')[-1]
-
         table_path = os.path.join(self.database_path, table)
-        picture.save(os.path.join(table_path, filename))
 
-        return filename
+        directory_name = uuid4().__str__()
+        directory_path = os.path.join(table_path, directory_name)
+        os.mkdir(directory_path)
 
-    def get_picture_path(self, table: str, filename: str) -> str:
+        picture_extension = picture.filename.split('.')[-1]
+
+        picture = Image.open(picture)
+
+        sizes = [256, 128, 64]
+        for size in sizes:
+            resized_picture = picture.resize((size, size))
+            resized_picture.save(os.path.join(directory_path, str(size) + '.' + picture_extension), optimize=True)
+
+        return directory_name, picture_extension
+
+    def get_picture_path(self, table: str, directory_name: str, extension: str, size: int) -> str:
         path = os.path.join(self.database_path, table)
-        path = os.path.join(path, filename)
+        path = os.path.join(path, directory_name)
+
+        path = os.path.join(path, str(size) + '.' + extension)
+
         return path
 
-    def delete_picture(self, table: str, filename: str):
+    def delete_picture(self, table: str, directory_path: str):
         path = os.path.join(self.database_path, table)
-        path = os.path.join(path, filename)
+        path = os.path.join(path, directory_path)
 
-        os.remove(path)
+        shutil.rmtree(path)
