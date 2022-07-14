@@ -37,7 +37,7 @@ class PicturesDB:
 
         picture = Image.open(picture)
 
-        sizes = [256, 128, 64]
+        sizes = [256, 128, 64, 32]
         for size in sizes:
             resized_picture = picture.resize((size, size))
             resized_picture.save(os.path.join(directory_path, str(size) + '.' + picture_extension), optimize=True)
