@@ -1,6 +1,7 @@
 from werkzeug.datastructures import FileStorage
 from typing import Union
 from uuid import uuid4
+from PIL import Image
 import shutil
 import os
 
@@ -34,15 +35,20 @@ class PicturesDB:
 
         picture_extension = picture.filename.split('.')[-1]
 
-        picture.save(os.path.join(directory_path, 'original.' + picture_extension))
+        picture = Image.open(picture)
+
+        sizes = [256, 128, 64]
+        for size in sizes:
+            resized_picture = picture.resize((size, size))
+            resized_picture.save(os.path.join(directory_path, str(size) + '.' + picture_extension), optimize=True)
 
         return directory_name, picture_extension
 
-    def get_picture_path(self, table: str, directory_name: str, extension: str, size: Union[int, None] = None) -> str:
+    def get_picture_path(self, table: str, directory_name: str, extension: str, size: int) -> str:
         path = os.path.join(self.database_path, table)
         path = os.path.join(path, directory_name)
 
-        path = os.path.join(path, str(size) + '.' + extension if size else 'original.' + extension)
+        path = os.path.join(path, str(size) + '.' + extension)
 
         return path
 

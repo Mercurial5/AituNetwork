@@ -6,11 +6,10 @@
             {% set picture = get_picture(author.id) %}
 
             {% if picture %}
-            <img src="{{ url_for('utils.get_picture', directory_path=picture.name, extension=picture.extension) }}" width="34"
-                 height="34" class="rounded-circle mt-1">
+            <img src="{{ url_for('utils.get_picture', directory_path=picture.name, extension=picture.extension, size=32) }}" class="rounded-circle mt-1">
             {% else %}
             <img src="https://i.pinimg.com/originals/fc/04/73/fc047347b17f7df7ff288d78c8c281cf.png"
-                 class="rounded-circle" width="34" height="34">
+                 class="rounded-circle" width="32" height="32">
             {% endif %}
         </div>
         <div class="rhs w-100 ms-2">

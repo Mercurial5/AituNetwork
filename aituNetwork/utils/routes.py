@@ -12,7 +12,8 @@ from utils import auth_required
 def get_picture():
     directory_path = request.values.get('directory_path')
     extension = request.values.get('extension')
-    path = picturesDB.get_picture_path('profile-pictures', directory_path, extension)
+    size = request.values.get('size')
+    path = picturesDB.get_picture_path('profile-pictures', directory_path, extension, size)
     return send_file(path, mimetype='image/gif')
 
 
