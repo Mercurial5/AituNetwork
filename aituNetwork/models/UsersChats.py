@@ -60,7 +60,7 @@ class UsersChats(db.Model):
         return chat_list
 
     @staticmethod
-    def count_of_unread_messages_for_user(user_id: int, chat_id: int):
+    def unread_messages_for_user(user_id: int, chat_id: int):
         messages_seen_by_user = SeenMessages.count_of_messages_of_user(user_id)
         return Messages.query.filter(Messages.chat_id == chat_id, Messages.id.notin_(messages_seen_by_user),
-                                     Messages.user_id != user_id).count()
+                                     Messages.user_id != user_id)
