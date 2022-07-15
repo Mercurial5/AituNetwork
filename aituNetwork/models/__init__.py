@@ -1,4 +1,5 @@
 from aituNetwork import db
+from aituNetwork.models.SeenMessages import SeenMessages
 from aituNetwork.models.PostLikes import PostLikes
 from aituNetwork.models.Friends import Friends
 from aituNetwork.models.Users import Users
@@ -12,4 +13,3 @@ from aituNetwork.models.EduPrograms import EduPrograms
 from aituNetwork.models.Admins import Admins
 from aituNetwork.models.Comments import Comments
 from aituNetwork.models.PostComments import PostComments
-from aituNetwork.models.SeenMessages import SeenMessages
