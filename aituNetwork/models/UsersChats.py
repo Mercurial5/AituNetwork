@@ -1,5 +1,5 @@
 from sqlalchemy import func, desc
-from aituNetwork.models import db, Chats, Messages
+from aituNetwork.models import db, Chats, Messages, SeenMessages
 from typing import Union
 
 
@@ -32,7 +32,8 @@ class UsersChats(db.Model):
     @staticmethod
     def get_user_chats(user_id: int):
         chat_id_list = UsersChats.query.filter_by(user_id=user_id).with_entities(UsersChats.chat_id)
-        chats = Messages.query.filter(Messages.chat_id.in_(chat_id_list)).group_by(Messages.chat_id).with_entities(func.max(Messages.id).label('id'), Messages.chat_id).order_by(desc('id')).all()
+        chats = Messages.query.filter(Messages.chat_id.in_(chat_id_list)).group_by(Messages.chat_id).with_entities(
+            func.max(Messages.id).label('id'), Messages.chat_id).order_by(desc('id')).all()
 
         return chats
 
@@ -57,3 +58,8 @@ class UsersChats(db.Model):
             UsersChats.query.filter_by(chat_id=chat.chat_id).delete()
 
         return chat_list
+
+    @staticmethod
+    def count_of_unread_messages_for_user(user_id: int, chat_id: int):
+        messages_seen_by_user = SeenMessages.count_of_messages_of_user(user_id)
+        return Messages.query.filter(Messages.chat_id == chat_id, Messages.id.notin_(messages_seen_by_user)).count()
