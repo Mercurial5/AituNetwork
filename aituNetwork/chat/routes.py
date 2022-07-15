@@ -4,6 +4,16 @@ from aituNetwork.models import Chats, UsersChats, Users, SeenMessages
 from utils import auth_required
 
 
+@chat.route('/')
+@auth_required
+def messages():
+    user = session['user']
+    chats = UsersChats.get_user_chats(user.id)
+    chats = [Chats.get(chat.chat_id) for chat in chats]
+
+    return render_template('messages.html', user=user, chats=chats)
+
+
 @chat.route('/conversation')
 @auth_required
 def conversation():

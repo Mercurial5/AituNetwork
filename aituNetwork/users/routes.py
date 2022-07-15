@@ -44,11 +44,7 @@ def friends(user_id):
 @users.route('/messages')
 @auth_required
 def messages():
-    user = session['user']
-    chats = UsersChats.get_user_chats(user.id)
-    chats = [Chats.get(chat.chat_id) for chat in chats]
-
-    return render_template('messages.html', user=user, chats=chats)
+    return redirect(url_for('chat.messages'))
 
 
 @users.route('/settings', defaults={'user_id': None}, methods=['GET', 'POST'])
