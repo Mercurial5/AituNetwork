@@ -1,6 +1,6 @@
 from flask import request, session, render_template, redirect, url_for
 from aituNetwork.chat import chat
-from aituNetwork.models import Chats, UsersChats, Users
+from aituNetwork.models import Chats, UsersChats, Users, SeenMessages
 from utils import auth_required
 
 
@@ -23,6 +23,10 @@ def conversation():
 @auth_required
 def chat(chat_id: int):
     user = session['user']
+
+    new_messages = UsersChats.unread_messages_for_user(user.id, chat_id)
+    new_messages = [SeenMessages(user_id=user.id, message_id=message.id) for message in new_messages]
+    SeenMessages.update(new_messages)
 
     # user with whom you chat
     chat_user_id = UsersChats.get_second_chat_user(chat_id, user.id)
