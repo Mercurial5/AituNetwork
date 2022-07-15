@@ -50,5 +50,9 @@ def get_comment(comment_id: int):
 
 def get_new_messages_count(user_id: int):
     user_chats = UsersChats.get_user_chats(user_id)
-    unread_messages_count = [UsersChats.unread_messages_for_user(user_id, chat.chat_id).count() for chat in user_chats]
+    unread_messages_count = [get_new_messages_count_in_chat(user_id, chat.chat_id) for chat in user_chats]
     return sum(unread_messages_count)
+
+
+def get_new_messages_count_in_chat(user_id: int, chat_id: int):
+    return UsersChats.unread_messages_for_user(user_id, chat_id).count()
