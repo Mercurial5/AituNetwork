@@ -1,4 +1,5 @@
-from aituNetwork.models import Users, ProfilePictures, PostLikes, UsersChats, Messages, Friends, Cities, EduPrograms, Admins, PostComments, Comments
+from aituNetwork.models import Users, ProfilePictures, PostLikes, UsersChats, Messages, Friends, Cities, EduPrograms, \
+    Admins, PostComments, Comments
 
 
 def get_user(user_id: int):
@@ -45,3 +46,9 @@ def get_post_comments(post_id: int):
 
 def get_comment(comment_id: int):
     return Comments.get(comment_id)
+
+
+def get_new_messages_count(user_id: int):
+    user_chats = UsersChats.get_user_chats(user_id)
+    unread_messages_count = [UsersChats.unread_messages_for_user(user_id, chat.chat_id).count() for chat in user_chats]
+    return sum(unread_messages_count)

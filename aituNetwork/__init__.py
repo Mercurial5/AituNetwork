@@ -67,6 +67,9 @@ def create_app():
     from aituNetwork.template_functions import get_post_comments
     app.jinja_env.globals.update(get_post_comments=get_post_comments)
 
+    from aituNetwork.template_functions import get_new_messages_count
+    app.jinja_env.globals.update(get_new_messages_count=get_new_messages_count)
+
     @app.route('/')
     def main():
         return redirect(url_for('auth.login'))
