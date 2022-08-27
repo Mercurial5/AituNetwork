@@ -6,3 +6,5 @@ Social network for students of AITU.
 
 barcode: 1<br>
 password: asdasdasd
+
+http://aitunetwork.social:5000/
