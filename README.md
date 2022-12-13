@@ -4,7 +4,7 @@ Social network for students of AITU.
 
 ### Test account:
 
-barcode: 1<br>
+barcode: 123<br>
 password: asdasdasd
 
-http://aitunetwork.social:5000/
+http://45.137.67.46:9888
