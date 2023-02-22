@@ -2,6 +2,9 @@ from sqlalchemy import func, desc
 from aituNetwork.models import db, Chats, Messages, SeenMessages
 from typing import Union
 
+import mongoengine
+from bson.objectid import ObjectId
+
 
 class UsersChats(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -64,3 +67,38 @@ class UsersChats(db.Model):
         messages_seen_by_user = SeenMessages.count_of_messages_of_user(user_id)
         return Messages.query.filter(Messages.chat_id == chat_id, Messages.id.notin_(messages_seen_by_user),
                                      Messages.user_id != user_id)
+
+
+class UsersChatsCopy(mongoengine.Document):
+    id = mongoengine.ObjectIdField(primary_key=True, default=ObjectId)
+    chat_id = mongoengine.ReferenceField(document_type="chat")
+    user_id = mongoengine.ReferenceField(document_type="user", unique_with="chat_id")
+    #__table_args__ = (db.UniqueConstraint('chat_id', 'user_id'),)
+
+    @staticmethod
+    def is_user_in_chat(user_id: int, chat_id: int) -> bool:
+        pass
+
+    @staticmethod
+    def get_second_chat_user(chat_id: int, user_id: int) -> Union[int, None]:
+        pass
+
+    @staticmethod
+    def get_user_chats(user_id: int):
+        pass
+
+    @staticmethod
+    def get_chat_between_users(first_user_id: int, second_user_id: int) -> Union[int, None]:
+        pass
+
+    @staticmethod
+    def add_user_to_chat(chat_id: int, user_id: int):
+        pass
+
+    @staticmethod
+    def delete_chats_for_deleted_user(user_id: int):
+        pass
+
+    @staticmethod
+    def unread_messages_for_user(user_id: int, chat_id: int):
+        pass

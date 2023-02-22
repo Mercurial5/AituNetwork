@@ -2,6 +2,8 @@ from aituNetwork.models import db
 from datetime import datetime
 from utils import random_id, picturesDB
 
+import mongoengine
+from bson.objectid import ObjectId
 
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -58,3 +60,49 @@ class Users(db.Model):
                 return False
 
         return True
+
+
+class UsersCopy(mongoengine.Document):
+    id = mongoengine.ObjectIdField(primary_key=True, default=ObjectId)
+    slug = mongoengine.StringField(unique=True, max_length=255, required=True, default=random_id)
+    barcode = mongoengine.IntField(unique=True, required=True)
+    first_name = mongoengine.StringField(unique=True, max_length=255, required=True)
+    last_name = mongoengine.StringField(unique=True, max_length=255, required=True)
+    about_me = mongoengine.StringField(unique=True, max_length=255, required=True,
+                                       default='Hi there! I\'m using AITU Network!')
+    birthday = mongoengine.DateTimeField(default=datetime.now, required=True, index=True)
+    city = mongoengine.IntField(unique=True, required=True)
+    course = mongoengine.IntField(unique=True, required=True)
+    edu_program = mongoengine.IntField(unique=True, required=True)
+    password = mongoengine.StringField(unique=True, required=True)
+    registered = mongoengine.DateTimeField(default=datetime.now, required=True)
+    is_activated = mongoengine.BooleanField(required=True, default=False)
+    last_online = mongoengine.DateTimeField(default=datetime.now, required=True)
+
+    @staticmethod
+    def get(user_id: int):
+        pass
+
+    @staticmethod
+    def is_slug_taken(slug: str) -> bool:
+        pass
+
+    @staticmethod
+    def update_user_info(user_id: int, update_info: dict):
+        pass
+
+    @staticmethod
+    def update_user_info_by_barcode(barcode: int, update_info: dict):
+        pass
+
+    @staticmethod
+    def get_users_for_new_friends_list(user_id: int):
+        pass
+
+    @staticmethod
+    def delete_user(user_id: int):
+        pass
+
+    @staticmethod
+    def is_user_correct(user):
+        pass
