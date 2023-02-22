@@ -1,5 +1,7 @@
 from aituNetwork.models import db
 
+import mongoengine
+from bson.objectid import ObjectId
 
 class PostLikes(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -40,3 +42,34 @@ class PostLikes(db.Model):
             # add [0] to post_id, because post_id has this form:
             # (*post_id*, ). So it's a tuple.
             PostLikes.query.filter_by(post_id=post_id[0]).delete()
+
+
+class PostLikesCopy(mongoengine.Document):
+    id = mongoengine.ObjectIdField(primary_key=True, default=ObjectId)
+    user_id = mongoengine.ReferenceField(document_type="user")
+    post_id = mongoengine.ReferenceField(document_type="post")
+    __table_args__ = (db.UniqueConstraint('user_id', 'post_id'),) # не знаю
+
+    @staticmethod
+    def get_like_counts(post_id: int):
+        db.postlike.find({"post_id": post_id}).count()
+
+    @staticmethod
+    def add(user_id: int, post_id: int):
+        db.postlike.insertOne({"user_id": user_id, "post_id": post_id})
+
+    @staticmethod
+    def get_post_like(user_id: int, post_id: int):
+        return db.postlike.findOne({"user_id": user_id, "post_id": post_id})
+
+    @staticmethod
+    def remove(user_id: int, post_id: int):
+        db.postlike.deleteOne({"user_id": user_id, "post_id": post_id})
+
+    @staticmethod
+    def delete_likes_from_post(post_id: int):
+        db.postlike.deleteOne({"post_id": post_id}) #?????????????????????????
+
+    @staticmethod
+    def delete_likes_for_deleted_user(user_id: int, post_id_list: list):
+        pass

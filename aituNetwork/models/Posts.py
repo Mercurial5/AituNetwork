@@ -2,6 +2,8 @@ from aituNetwork.models import PostLikes, Friends
 from aituNetwork.models import db
 from datetime import datetime
 
+import mongoengine
+from bson.objectid import ObjectId
 
 class Posts(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -53,3 +55,34 @@ class Posts(db.Model):
         Posts.query.filter_by(author_id=user_id).delete()
 
         return posts_id_list
+
+
+class PostsCopy(mongoengine.Document):
+    id = mongoengine.ObjectIdField(primary_key=True, default=ObjectId)
+    author_id = mongoengine.ReferenceField("Users")
+    content = mongoengine.StringField(unique=True, required=True)
+    created = mongoengine.DateTimeField(default=datetime.now)
+
+    @staticmethod
+    def get(post_id: int):
+        pass
+
+    @staticmethod
+    def add_post(author_id: int, content: str):
+        pass
+
+    @staticmethod
+    def get_posts(author_id: int):
+        pass
+
+    @staticmethod
+    def get_feed(user_id: int):
+        pass
+
+    @staticmethod
+    def delete_post(post_id: int):
+        pass
+
+    @staticmethod
+    def delete_posts_for_deleted_user(user_id: int):
+        pass

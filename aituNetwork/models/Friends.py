@@ -1,5 +1,7 @@
 from aituNetwork.models import db
 
+import mongoengine
+from bson.objectid import ObjectId
 
 class Friends(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -61,3 +63,47 @@ class Friends(db.Model):
     @staticmethod
     def delete_friends_for_deleted_user(user_id: int):
         Friends.query.filter((Friends.user_id == user_id) | (Friends.friend_id == user_id)).delete()
+
+
+class FriendsCopy(mongoengine.Document):
+    id = mongoengine.ObjectIdField(primary_key=True, default=ObjectId)
+    user = mongoengine.ReferenceField("Users")
+    friend = mongoengine.ReferenceField("Friends", unique_with="user")
+    # __table_args__ = (mongoengine.UniqueConstraint('user_id', 'friend_id'),)
+
+    @staticmethod
+    def add_friend(user_id: int, friend_id: int):
+        if db.friends.find({"user.user_id": user_id, "friend.friend_id": friend_id}) is not None:
+            db.friends.insertOne({"user_id": user_id, "friend_id": friend_id})
+
+    @staticmethod
+    def remove_friend(user_id: int, friend_id: int):
+        if db.friends.find({"user.user_id": user_id, "friend.friend_id": friend_id}) is not None:
+            db.friends.deleteOne({"user.user_id": user_id, "friend_id": friend_id})
+
+    @staticmethod
+    def get_friend_list(user_id: int, only_query: bool = False):
+        pass
+
+    @staticmethod
+    def get_friend_status(user_id: int, friend_id: int) -> int:
+        is_my_friend = db.friends.find({"user.user_id": user_id, "friend.friend_id": friend_id})
+        am_i_friend = db.friends.find({"user.user_id": friend_id, "friend.friend_id": user_id})
+
+        friend_status = None
+        if is_my_friend is not None and am_i_friend is not None:
+            friend_status = 3
+        elif is_my_friend is not None:
+            friend_status = 1
+        elif am_i_friend is not None:
+            friend_status = 2
+
+        return friend_status
+
+    @staticmethod
+    def is_friend(user_id: int, friend_id: int):
+        return db.friends.find({"user.user_id": user_id, "friend.friend_id": friend_id})
+
+    @staticmethod
+    def delete_friends_for_deleted_user(user_id: int):
+        pass
