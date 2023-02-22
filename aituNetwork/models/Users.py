@@ -5,6 +5,7 @@ from utils import random_id, picturesDB
 import mongoengine
 from bson.objectid import ObjectId
 
+
 class Users(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     slug = db.Column(db.String(255), unique=True, nullable=False, default=random_id)
@@ -31,6 +32,7 @@ class Users(db.Model):
 
     @staticmethod
     def update_user_info(user_id: int, update_info: dict):
+        User.objects(id=user_id).first().update(**update_info).save()
         Users.query.filter_by(id=user_id).update(update_info)
         db.session.commit()
 
@@ -62,22 +64,22 @@ class Users(db.Model):
         return True
 
 
-class UsersCopy(mongoengine.Document):
-    id = mongoengine.ObjectIdField(primary_key=True, default=ObjectId)
+class User(mongoengine.Document):
+    id = mongoengine.IntField(primary_key=True)
     slug = mongoengine.StringField(unique=True, max_length=255, required=True, default=random_id)
     barcode = mongoengine.IntField(unique=True, required=True)
-    first_name = mongoengine.StringField(unique=True, max_length=255, required=True)
-    last_name = mongoengine.StringField(unique=True, max_length=255, required=True)
-    about_me = mongoengine.StringField(unique=True, max_length=255, required=True,
+    first_name = mongoengine.StringField(null=True, max_length=255)
+    last_name = mongoengine.StringField(null=True, max_length=255)
+    about_me = mongoengine.StringField(null=True, max_length=255,
                                        default='Hi there! I\'m using AITU Network!')
-    birthday = mongoengine.DateTimeField(default=datetime.now, required=True, index=True)
-    city = mongoengine.IntField(unique=True, required=True)
-    course = mongoengine.IntField(unique=True, required=True)
-    edu_program = mongoengine.IntField(unique=True, required=True)
-    password = mongoengine.StringField(unique=True, required=True)
-    registered = mongoengine.DateTimeField(default=datetime.now, required=True)
-    is_activated = mongoengine.BooleanField(required=True, default=False)
-    last_online = mongoengine.DateTimeField(default=datetime.now, required=True)
+    birthday = mongoengine.DateTimeField(default=datetime.now)
+    city = mongoengine.IntField(null=True)
+    course = mongoengine.IntField(null=True)
+    edu_program = mongoengine.IntField(null=True)
+    password = mongoengine.StringField(null=True)
+    registered = mongoengine.DateTimeField(default=datetime.now)
+    is_activated = mongoengine.BooleanField()
+    last_online = mongoengine.DateTimeField(default=datetime.now)
 
     @staticmethod
     def get(user_id: int):

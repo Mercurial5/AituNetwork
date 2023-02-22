@@ -2,7 +2,7 @@ from aituNetwork import db
 from aituNetwork.models.SeenMessages import SeenMessages
 from aituNetwork.models.PostLikes import PostLikes
 from aituNetwork.models.Friends import Friends
-from aituNetwork.models.Users import Users
+from aituNetwork.models.Users import Users, User
 from aituNetwork.models.Posts import Posts
 from aituNetwork.models.ProfilePictures import ProfilePictures
 from aituNetwork.models.Chats import Chats

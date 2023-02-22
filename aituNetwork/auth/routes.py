@@ -6,7 +6,7 @@ from os import getenv
 import functools
 
 from aituNetwork.auth import auth
-from aituNetwork.models import Users
+from aituNetwork.models import Users, User
 from aituNetwork import db
 
 from utils import send_email
@@ -73,6 +73,8 @@ def register():
             user = Users(barcode=barcode, first_name=first_name, last_name=last_name, password=hashed_password)
             db.session.add(user)
             db.session.commit()
+            User(id=user.id, barcode=barcode, first_name=first_name, last_name=last_name,
+                 password=hashed_password).save()
 
             token = url_serializer.dumps(barcode, salt=getenv('SECRET_KEY_BARCODE_CONFIRM'))
             token_link = url_for('auth.confirm_email', token=token, _external=True)

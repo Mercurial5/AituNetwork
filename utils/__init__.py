@@ -49,4 +49,4 @@ def random_id():
     while Users.query.filter_by(id=rand).first() is not None:
         rand = randint(mn, mx)
 
-    return rand
+    return str(rand)
